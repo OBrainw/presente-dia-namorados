@@ -4,104 +4,250 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nosso Primeiro Dia dos Namorados ❤️</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            /* Variáveis para tema claro */
+            --bg-primary: linear-gradient(135deg, #fff5f5 0%, #ffe6f2 100%);
+            --text-primary: #7a004c;
+            --text-secondary: #e60073;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --card-border: rgba(230, 0, 115, 0.1);
+            --shadow: 0 8px 16px rgba(230, 0, 115, 0.2);
+            --button-bg: #e60073;
+            --button-text: #fff;
+            --gallery-bg: #fff;
+        }
+
+        .dark-theme {
+            /* Variáveis para tema escuro */
+            --bg-primary: linear-gradient(135deg, #1a000d 0%, #33001a 100%);
+            --text-primary: #ffb3d9;
+            --text-secondary: #ff66b3;
+            --card-bg: rgba(51, 0, 26, 0.7);
+            --card-border: rgba(255, 102, 179, 0.2);
+            --shadow: 0 8px 16px rgba(255, 102, 179, 0.3);
+            --button-bg: #ff66b3;
+            --button-text: #1a000d;
+            --gallery-bg: #1a000d;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            transition: background 0.5s ease, color 0.5s ease;
         }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #fff5f5 0%, #ffe6f2 100%);
-            color: #7a004c;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             line-height: 1.6;
             padding: 20px;
-            text-align: center;
+            min-height: 100vh;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
         }
         
         header {
             padding: 40px 0;
+            position: relative;
+            text-align: center;
         }
         
         h1 {
-            font-size: 2.8rem;
+            font-size: 3rem;
             margin-bottom: 15px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            color: #e60073;
+            color: var(--text-secondary);
+            font-weight: 700;
         }
         
         .subtitle {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             margin-bottom: 30px;
             font-weight: 300;
         }
         
         .heart {
-            color: #ff4d94;
+            color: var(--text-secondary);
             font-size: 1.5rem;
             margin: 0 5px;
         }
         
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
             margin: 40px 0;
+        }
+        
+        .photo-container {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            height: 350px; /* Altura maior para fotos retrato */
+            background-color: var(--gallery-bg);
+            position: relative;
         }
         
         .photo {
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 8px 16px rgba(230, 0, 115, 0.2);
-            transition: transform 0.3s ease;
-            height: 250px;
-            background-position: center;
-            background-size: cover;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Mantém a proporção sem cortar */
+            display: block;
         }
         
-        .photo:hover {
+        .photo-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .photo-container:hover {
             transform: translateY(-10px);
         }
         
+        .photo-container:hover .photo-caption {
+            transform: translateY(0);
+        }
+        
         .message {
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: var(--card-bg);
             border-radius: 20px;
-            padding: 30px;
+            padding: 40px;
             margin: 40px 0;
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(230, 0, 115, 0.1);
+            border: 1px solid var(--card-border);
+            text-align: center;
         }
         
         .love-note {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-style: italic;
             margin-top: 20px;
             line-height: 1.8;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         footer {
             margin-top: 40px;
             padding: 20px;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: 30px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        
+        .qrcode-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 30px auto;
+            max-width: 300px;
+            text-align: center;
+            border: 1px solid var(--card-border);
+        }
+        
+        .qrcode {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .qrcode::before {
+            content: "❤️";
+            position: absolute;
+            font-size: 3rem;
+            z-index: 1;
+        }
+        
+        .qrcode-grid {
+            display: grid;
+            grid-template-columns: repeat(21, 1fr);
+            grid-template-rows: repeat(21, 1fr);
+            width: 180px;
+            height: 180px;
+            gap: 1px;
+        }
+        
+        .pixel {
+            background: #e60073;
+            border-radius: 2px;
+        }
+        
+        .qrcode-text {
+            margin-top: 15px;
             font-size: 0.9rem;
-            color: #e60073;
+            color: var(--text-primary);
         }
         
         /* Responsividade */
-        @media (max-width: 600px) {
-            h1 { font-size: 2rem; }
-            .subtitle { font-size: 1.1rem; }
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .subtitle { font-size: 1.2rem; }
             .gallery { grid-template-columns: 1fr; }
+            .photo-container { height: 400px; }
+            .message { padding: 25px; }
+            .love-note { font-size: 1.1rem; }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { font-size: 1.8rem; }
+            .subtitle { font-size: 1rem; }
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i> Modo Escuro
+    </button>
+    
     <div class="container">
         <header>
             <h1>Feliz Dia dos Namorados!</h1>
@@ -117,24 +263,125 @@
         </div>
         
         <div class="gallery">
-            <!-- Adicione suas fotos aqui -->
-            <div class="photo" style="background-image: url('https://i1.imageban.ru/out/2025/06/12/78da8d33889e1ba9aefbfc289e4f5067.jpeg');"></div>
-            <div class="photo" style="background-image: url('foto2.jpg');"></div>
-            <div class="photo" style="background-image: url('foto3.jpg');"></div>
-            <div class="photo" style="background-image: url('foto4.jpg');"></div>
+            <!-- Fotos em formato retrato -->
+            <div class="photo-container">
+                <img src="https://imageban.ru/show/2025/06/12/c0cfb652b768ecd4994da2868cb4e0fe/jpeg" alt="Nossa foto 1" class="photo">
+                <div class="photo-caption">Nosso primeiro encontro como casal</div>
+            </div>
+            <div class="photo-container">
+                <img src="https://imageban.ru/show/2025/06/12/7c8db67ed7877148637823dfe82cb05f/jpeg" alt="Nossa foto 2" class="photo">
+                <div class="photo-caption">Sorrindo juntos</div>
+            </div>
+            <div class="photo-container">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=800&q=80" alt="Nossa foto 3" class="photo">
+                <div class="photo-caption">Aquele dia especial</div>
+            </div>
+            <div class="photo-container">
+                <img src="https://imageban.ru/show/2025/06/12/320bcc13a8b65c337e2ac9b4224c42b6/jpeg" alt="Nossa foto 4" class="photo">
+                <div class="photo-caption">Aonde me sinto em paz</div>
+            </div>
         </div>
         
         <div class="message">
             <h2>Minha Promessa</h2>
             <p class="love-note">
                 Prometo fazer cada dia ao teu lado valer a pena, com risos, cumplicidade e muito amor. 
-                Você trouxe luz à minha vida de um jeito que nunca imaginei possível.
+                Você trouxe luz à minha vida de um jeito que nunca imaginei possível. Que possamos construir 
+                muitos momentos lindos juntos, te amo baixinha!
             </p>
+        </div>
+        
+        <div class="qrcode-container">
+            <h3>Nosso QR Code Especial</h3>
+            <div class="qrcode">
+                <div class="qrcode-grid">
+                    <!-- Gerador de QR code simulado com corações -->
+                    <div class="pixel"></div>
+                    <div class="pixel"></div>
+                    <div class="pixel"></div>
+                    <!-- ... (código completo no resultado final) -->
+                </div>
+            </div>
+            <p class="qrcode-text">Escaneie para guardar esta página em seu coração</p>
         </div>
         
         <footer>
             <p>Feito com <span class="heart">❤️</span> especialmente para você</p>
+            <p>Nosso primeiro Dia dos Namorados - 2026</p>
         </footer>
     </div>
+
+    <script>
+        // Toggle de tema
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+            
+            if (document.body.classList.contains('dark-theme')) {
+                themeIcon.className = 'fas fa-sun';
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
+            } else {
+                themeIcon.className = 'fas fa-moon';
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i> Modo Escuro';
+            }
+        });
+        
+        // Simulação de QR code com padrão de coração
+        const qrGrid = document.querySelector('.qrcode-grid');
+        qrGrid.innerHTML = ''; // Limpa o placeholder
+        
+        // Padrão de QR code com coração no centro
+        const qrPattern = [
+            "111111100010101111111",
+            "100000101011101000001",
+            "101110101010101011101",
+            "101110101000101011101",
+            "101110100010001011101",
+            "100000101010101000001",
+            "111111101010101111111",
+            "000000001110100000000",
+            "111100111010101001111",
+            "101010001000100010101",
+            "010101010111010101010",
+            "110101000101010001011",
+            "100101011101110101001",
+            "001010100000001010100",
+            "111111101000101111111",
+            "100000100010001000001",
+            "101110101110101011101",
+            "101110100000001011101",
+            "101110101010101011101",
+            "100000101010101000001",
+            "111111101010101111111"
+        ];
+        
+        for (let i = 0; i < 21; i++) {
+            for (let j = 0; j < 21; j++) {
+                const pixel = document.createElement('div');
+                pixel.classList.add('pixel');
+                
+                // Adiciona um coração no centro
+                if (i === 10 && j === 10) {
+                    pixel.innerHTML = '❤️';
+                    pixel.style.fontSize = '1.2rem';
+                    pixel.style.lineHeight = '0';
+                    pixel.style.display = 'flex';
+                    pixel.style.alignItems = 'center';
+                    pixel.style.justifyContent = 'center';
+                    pixel.style.background = 'transparent';
+                } 
+                // Cria o padrão do QR code
+                else if (qrPattern[i] && qrPattern[i][j] === '1') {
+                    pixel.style.background = 'var(--text-secondary)';
+                } else {
+                    pixel.style.background = '#fff';
+                }
+                
+                qrGrid.appendChild(pixel);
+            }
+        }
+    </script>
 </body>
 </html>
