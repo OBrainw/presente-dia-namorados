@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nosso Primeiro Dia dos Namorados ❤️</title>
+    <title>Presente Especial de Dia dos Namorados</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            /* Variáveis para tema claro */
+            /* Variáveis para tema claro (padrão) */
             --bg-primary: linear-gradient(135deg, #fff5f5 0%, #ffe6f2 100%);
             --text-primary: #7a004c;
             --text-secondary: #e60073;
@@ -17,10 +17,11 @@
             --button-bg: #e60073;
             --button-text: #fff;
             --gallery-bg: #fff;
+            --heart-color: #ff4d94;
         }
 
-        .dark-theme {
-            /* Variáveis para tema escuro */
+        .secret-theme {
+            /* Variáveis para tema secreto */
             --bg-primary: linear-gradient(135deg, #1a000d 0%, #33001a 100%);
             --text-primary: #ffb3d9;
             --text-secondary: #ff66b3;
@@ -30,6 +31,7 @@
             --button-bg: #ff66b3;
             --button-text: #1a000d;
             --gallery-bg: #1a000d;
+            --heart-color: #ff66b3;
         }
 
         * {
@@ -75,7 +77,7 @@
         }
         
         .heart {
-            color: var(--text-secondary);
+            color: var(--heart-color);
             font-size: 1.5rem;
             margin: 0 5px;
         }
@@ -92,7 +94,7 @@
             overflow: hidden;
             box-shadow: var(--shadow);
             transition: transform 0.3s ease;
-            height: 350px; /* Altura maior para fotos retrato */
+            height: 350px;
             background-color: var(--gallery-bg);
             position: relative;
         }
@@ -100,7 +102,7 @@
         .photo {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Mantém a proporção sem cortar */
+            object-fit: cover;
             display: block;
         }
         
@@ -211,7 +213,7 @@
         }
         
         .pixel {
-            background: #e60073;
+            background: var(--heart-color);
             border-radius: 2px;
         }
         
@@ -219,6 +221,79 @@
             margin-top: 15px;
             font-size: 0.9rem;
             color: var(--text-primary);
+        }
+        
+        /* Modal para senha secreta */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #ffd9eb 0%, #ffb3d9 100%);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7a004c;
+        }
+        
+        .modal h3 {
+            color: #7a004c;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 15px 0;
+            border: 2px solid #e60073;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        
+        .submit-btn {
+            background: #e60073;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .submit-btn:hover {
+            background: #ff3399;
+            transform: scale(1.05);
+        }
+        
+        .error-message {
+            color: #ff3333;
+            margin-top: 10px;
+            display: none;
         }
         
         /* Responsividade */
@@ -240,13 +315,28 @@
                 padding: 8px 15px;
                 font-size: 0.9rem;
             }
+            .modal-content {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <button class="theme-toggle" id="themeToggle">
-        <i class="fas fa-moon"></i> Modo Escuro
+        <i class="fas fa-key"></i> Tema Secreto
     </button>
+    
+    <!-- Modal para senha -->
+    <div class="modal" id="passwordModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h3>Desbloquear Presente Secreto</h3>
+            <p>Digite a palavra-passe especial para revelar um presente único:</p>
+            <input type="password" class="password-input" id="secretPassword" placeholder="Dica: Nossa palavra de segurança?">
+            <button class="submit-btn" id="submitPassword">Desbloquear</button>
+            <p class="error-message" id="errorMessage">Palavra-passe incorreta! Tente novamente.</p>
+        </div>
+    </div>
     
     <div class="container">
         <header>
@@ -254,10 +344,10 @@
             <p class="subtitle">Cada momento contigo é especial <span class="heart">❤️</span></p>
         </header>
         
-        <div class="message">
+        <div class="message" id="message1">
             <h2>Nosso encontro de almas</h2>
             <p class="love-note">
-                Mesmo com apenas um mês, cada instante ao teu lado ficou guardado no meu coração. 
+                Mesmo com apenas um mês, cada instante ao teu lado ficou guardado no meu coração, e na minha alma. 
                 Este é só o primeiro de muitos Dias dos Namorados que vamos celebrar juntos...
             </p>
         </div>
@@ -282,24 +372,20 @@
             </div>
         </div>
         
-        <div class="message">
+        <div class="message" id="message2">
             <h2>Minha Promessa</h2>
             <p class="love-note">
-                Prometo fazer cada dia ao teu lado valer a pena, com risos, cumplicidade, muito cárdio e muito amor! 
-                Você trouxe luz à minha vida de um jeito que nunca imaginei ser possível. Que possamos construir 
-                muitos momentos lindos juntos, te amo baixinha!
+                Prometo fazer cada dia ao teu lado valer a pena, com risos, cumplicidade e muito amor. 
+                Você trouxe luz à minha vida de um jeito que nunca imaginei possível. Que possamos construir 
+                muitos momentos lindos juntos.
             </p>
         </div>
         
         <div class="qrcode-container">
             <h3>Nosso QR Code Especial</h3>
             <div class="qrcode">
-                <div class="qrcode-grid">
-                    <!-- Gerador de QR code simulado com corações -->
-                    <div class="pixel"></div>
-                    <div class="pixel"></div>
-                    <div class="pixel"></div>
-                    <!-- ... (código completo no resultado final) -->
+                <div class="qrcode-grid" id="qrGrid">
+                    <!-- QR code será gerado por JavaScript -->
                 </div>
             </div>
             <p class="qrcode-text">Escaneie para guardar esta página em seu coração</p>
@@ -312,76 +398,184 @@
     </div>
 
     <script>
-        // Toggle de tema
+        // Elementos do DOM
         const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = themeToggle.querySelector('i');
+        const passwordModal = document.getElementById('passwordModal');
+        const secretPassword = document.getElementById('secretPassword');
+        const submitPassword = document.getElementById('submitPassword');
+        const errorMessage = document.getElementById('errorMessage');
+        const closeModal = document.getElementById('closeModal');
+        const qrGrid = document.getElementById('qrGrid');
+        const message1 = document.getElementById('message1');
+        const message2 = document.getElementById('message2');
+        const gallery = document.querySelector('.gallery');
         
+        // Senha secreta (pode ser alterada)
+        const SECRET_PASSWORD = "vermelho";
+        
+        // Abrir modal ao clicar no botão de tema
         themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-theme');
+            passwordModal.style.display = 'flex';
+            secretPassword.focus();
+        });
+        
+        // Fechar modal
+        closeModal.addEventListener('click', () => {
+            passwordModal.style.display = 'none';
+            errorMessage.style.display = 'none';
+            secretPassword.value = '';
+        });
+        
+        // Verificar senha
+        submitPassword.addEventListener('click', () => {
+            const password = secretPassword.value.toLowerCase();
             
-            if (document.body.classList.contains('dark-theme')) {
-                themeIcon.className = 'fas fa-sun';
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
+            if(password === SECRET_PASSWORD) {
+                // Ativar tema secreto
+                document.body.classList.add('secret-theme');
+                
+                // Mudar o texto do botão
+                themeToggle.innerHTML = '<i class="fas fa-heart"></i> Tema Especial';
+                
+                // Alterar mensagens
+                message1.querySelector('.love-note').innerHTML = 
+                    "Hoje descobri que o amor não precisa de tempo para existir. Em apenas um mês, você me mostrou o que é uma conexão verdadeira. Cada uma de nossas loucuras se conectam de um jeito especial...";
+                
+                message2.querySelector('.love-note').innerHTML = 
+                    "Prometo ser teu porto seguro, teu maior fã e teu desejo mais profundo, assim como você é o meu. Minha missão é de fazer gozar além dos prazeres da carne, mas quero ver a tua alma gozar e despertar o teu lado mais selvagem.";
+                
+                // Alterar fotos
+                const photos = gallery.querySelectorAll('.photo');
+                photos[0].src = "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=800&q=80";
+                photos[0].parentElement.querySelector('.photo-caption').textContent = "Nosso futuro";
+                
+                photos[1].src = "https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=800&q=80";
+                photos[1].parentElement.querySelector('.photo-caption').textContent = "Sempre juntos";
+                
+                photos[2].src = "https://images.unsplash.com/photo-1567532939604-b6b5b0e16019?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=800&q=80";
+                photos[2].parentElement.querySelector('.photo-caption').textContent = "Risadas compartilhadas";
+                
+                photos[3].src = "https://images.unsplash.com/photo-1534308143481-a55a00cf8ade?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=800&q=80";
+                photos[3].parentElement.querySelector('.photo-caption').textContent = "Olhares que dizem tudo";
+                
+                // Fechar modal
+                passwordModal.style.display = 'none';
+                secretPassword.value = '';
+                
+                // Mostrar confetes
+                showConfetti();
+                
             } else {
-                themeIcon.className = 'fas fa-moon';
-                themeToggle.innerHTML = '<i class="fas fa-moon"></i> Modo Escuro';
+                // Mostrar mensagem de erro
+                errorMessage.style.display = 'block';
+                secretPassword.value = '';
+                secretPassword.focus();
             }
         });
         
-        // Simulação de QR code com padrão de coração
-        const qrGrid = document.querySelector('.qrcode-grid');
-        qrGrid.innerHTML = ''; // Limpa o placeholder
+        // Fechar modal ao clicar fora dele
+        window.addEventListener('click', (e) => {
+            if(e.target === passwordModal) {
+                passwordModal.style.display = 'none';
+                errorMessage.style.display = 'none';
+                secretPassword.value = '';
+            }
+        });
         
-        // Padrão de QR code com coração no centro
-        const qrPattern = [
-            "111111100010101111111",
-            "100000101011101000001",
-            "101110101010101011101",
-            "101110101000101011101",
-            "101110100010001011101",
-            "100000101010101000001",
-            "111111101010101111111",
-            "000000001110100000000",
-            "111100111010101001111",
-            "101010001000100010101",
-            "010101010111010101010",
-            "110101000101010001011",
-            "100101011101110101001",
-            "001010100000001010100",
-            "111111101000101111111",
-            "100000100010001000001",
-            "101110101110101011101",
-            "101110100000001011101",
-            "101110101010101011101",
-            "100000101010101000001",
-            "111111101010101111111"
-        ];
-        
-        for (let i = 0; i < 21; i++) {
-            for (let j = 0; j < 21; j++) {
-                const pixel = document.createElement('div');
-                pixel.classList.add('pixel');
-                
-                // Adiciona um coração no centro
-                if (i === 10 && j === 10) {
-                    pixel.innerHTML = '❤️';
-                    pixel.style.fontSize = '1.2rem';
-                    pixel.style.lineHeight = '0';
-                    pixel.style.display = 'flex';
-                    pixel.style.alignItems = 'center';
-                    pixel.style.justifyContent = 'center';
-                    pixel.style.background = 'transparent';
-                } 
-                // Cria o padrão do QR code
-                else if (qrPattern[i] && qrPattern[i][j] === '1') {
-                    pixel.style.background = 'var(--text-secondary)';
-                } else {
-                    pixel.style.background = '#fff';
+        // Gerar QR code com coração
+        function generateQRCode() {
+            // Padrão de QR code com coração no centro
+            const qrPattern = [
+                "111111100010101111111",
+                "100000101011101000001",
+                "101110101010101011101",
+                "101110101000101011101",
+                "101110100010001011101",
+                "100000101010101000001",
+                "111111101010101111111",
+                "000000001110100000000",
+                "111100111010101001111",
+                "101010001000100010101",
+                "010101010111010101010",
+                "110101000101010001011",
+                "100101011101110101001",
+                "001010100000001010100",
+                "111111101000101111111",
+                "100000100010001000001",
+                "101110101110101011101",
+                "101110100000001011101",
+                "101110101010101011101",
+                "100000101010101000001",
+                "111111101010101111111"
+            ];
+            
+            qrGrid.innerHTML = '';
+            
+            for (let i = 0; i < 21; i++) {
+                for (let j = 0; j < 21; j++) {
+                    const pixel = document.createElement('div');
+                    pixel.classList.add('pixel');
+                    
+                    // Adiciona um coração no centro
+                    if (i === 10 && j === 10) {
+                        pixel.innerHTML = '❤️';
+                        pixel.style.fontSize = '1.2rem';
+                        pixel.style.lineHeight = '0';
+                        pixel.style.display = 'flex';
+                        pixel.style.alignItems = 'center';
+                        pixel.style.justifyContent = 'center';
+                        pixel.style.background = 'transparent';
+                    } 
+                    // Cria o padrão do QR code
+                    else if (qrPattern[i] && qrPattern[i][j] === '1') {
+                        pixel.style.background = 'var(--heart-color)';
+                    } else {
+                        pixel.style.background = '#fff';
+                    }
+                    
+                    qrGrid.appendChild(pixel);
                 }
-                
-                qrGrid.appendChild(pixel);
             }
         }
+        
+        // Efeito de confete para quando o tema secreto é ativado
+        function showConfetti() {
+            const confettiCount = 100;
+            const container = document.querySelector('.container');
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.innerHTML = '❤️';
+                confetti.style.position = 'fixed';
+                confetti.style.fontSize = Math.random() * 20 + 10 + 'px';
+                confetti.style.color = ['#ff66b3', '#ff3399', '#ff0066', '#ff99cc'][Math.floor(Math.random() * 4)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-50px';
+                confetti.style.opacity = '0';
+                confetti.style.zIndex = '1000';
+                confetti.style.pointerEvents = 'none';
+                
+                document.body.appendChild(confetti);
+                
+                // Animação
+                const animation = confetti.animate([
+                    { transform: 'translateY(0)', opacity: 0 },
+                    { transform: `translateY(${Math.random() * 100 + 100}vh)`, opacity: 1 },
+                    { transform: `translateY(${Math.random() * 100 + 200}vh)`, opacity: 0 }
+                ], {
+                    duration: Math.random() * 3000 + 2000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
+                });
+                
+                // Remover após a animação
+                animation.onfinish = () => {
+                    confetti.remove();
+                };
+            }
+        }
+        
+        // Inicializar QR code
+        generateQRCode();
     </script>
 </body>
 </html>
