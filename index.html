@@ -138,18 +138,11 @@
             transition: transform 0.3s ease;
         }
         
-        .photo-container:hover {
+        .photo-container:hover, .video-container:hover {
             transform: translateY(-10px);
         }
         
-        .photo-container:hover .photo-caption {
-            transform: translateY(0);
-        }
-        
-        .video-container:hover {
-            transform: translateY(-10px);
-        }
-        
+        .photo-container:hover .photo-caption,
         .video-container:hover .photo-caption {
             transform: translateY(0);
         }
@@ -453,7 +446,7 @@
         </div>
         
         <div class="gallery">
-            <!-- Fotos em formato retrato -->
+            <!-- Fotos em formato retrato - 4 fotos para o tema claro -->
             <div class="photo-container">
                 <img src="https://i1.imageban.ru/out/2025/06/12/78da8d33889e1ba9aefbfc289e4f5067.jpeg" alt="Nossa foto 1" class="photo">
                 <div class="photo-caption">Nosso primeiro encontro como casal</div>
@@ -465,6 +458,10 @@
             <div class="photo-container">
                 <img src="https://i7.imageban.ru/out/2025/06/12/c0cfb652b768ecd4994da2868cb4e0fe.jpeg" alt="Nossa foto 3" class="photo">
                 <div class="photo-caption">Cada momento é especial com você</div>
+            </div>
+            <div class="photo-container">
+                <img src="https://i7.imageban.ru/out/2025/06/12/320bcc13a8b65c337e2ac9b4224c42b6.jpeg" alt="Nossa foto 4" class="photo">
+                <div class="photo-caption">Aonde me sinto em paz</div>
             </div>
             
             <!-- Container de vídeo (inicialmente oculto) -->
@@ -488,7 +485,6 @@
         
         <div class="qrcode-container">
             <h3>Nosso QR Code Especial</h3>
-            <!-- Substitua o src pelo caminho do seu QR code -->
             <img src="https://i6.imageban.ru/out/2025/06/14/984de4bee5ce00a4a5b6a437e6ed08b1.png" alt="QR Code" class="qrcode-img">
             <p class="qrcode-text">Escaneie para guardar esta página em seu coração</p>
         </div>
@@ -521,15 +517,16 @@
         const audioProgress = document.getElementById('audioProgress');
         const audioTitle = document.getElementById('audioTitle');
         
-        // Áudios para cada tema
-        const audioLight = new Audio("https://1drv.ms/u/c/0ebd73b258ca7dcf/Ea1QiIGFUKRLvZYEjY-nRYoBJUxgw_KNC9XfkB_T0MEJtQ?e=HGFdLS");
-        const audioDark = new Audio("https://1drv.ms/u/c/0ebd73b258ca7dcf/EX4QNOm1V7lDhWU07hwgTSYB1de4423GMdfGfRWr2TdP3g?e=pUuqZA");
+        // Áudios para cada tema - USE LINKS DIRETOS AQUI
+        // Exemplo com links diretos (substitua pelos seus)
+        const audioLight = new Audio("https://uc8a03601731c9705bf7f215650f.dl.dropboxusercontent.com/cd/0/get/Crm9bH8zAT4zikGeKnFutMGweVy991W1On0e-uXFis2xwk8BYl2IKOm9S4pkCPlP_LNm5Iy3_fk84Agjvn45prAkhYHw35VBzZ_b2I4NoNKLrq69k5VArUzMxFDu3CFH81j7PvmFs5ctrJyb7EAy1OUOPeMs3qGAPQMcm1e0G056bg/file?_download_id=70187869614450643204283773320989594333589861307514867919937825524&_log_download_success=1#");
+        const audioDark = new Audio("https://uccc536dd6f5cb070a25f86f01fa.dl.dropboxusercontent.com/cd/0/get/Crkd7j8PiL5DpFXE1__Cc6MI3uPiB-9cyCyMrtIi2w6E7JCdQxA25Z7LA-mMO0c30nUo-JzT_zVPEwm9DNoqAoFGUPOUkF-A-0Bjwie9_LQRCB7Crpqk5Ye2ze-7_5bzPCawMdahMbr0raxoLsRr5_6oiwDgmnn44YHhoRL08Hfuzg/file#");
         
         // Áudio ativo
         let currentAudio = audioLight;
         currentAudio.volume = 0.5;
         
-        // Senha secreta (pode ser alterada)
+        // Senha secreta
         const SECRET_PASSWORD = "vermelho";
         
         // Abrir modal ao clicar no botão de tema
@@ -550,50 +547,7 @@
             const password = secretPassword.value.toLowerCase();
             
             if(password === SECRET_PASSWORD) {
-                // Ativar tema secreto
-                document.body.classList.add('secret-theme');
-                
-                // Mudar o texto do botão
-                themeToggle.innerHTML = '<i class="fas fa-heart"></i> Tema Especial';
-                
-                // Alterar mensagens
-                message1.querySelector('.love-note').innerHTML = 
-                    "Hoje descobri que o amor não precisa de tempo para existir. Em apenas um mês, você me mostrou o que é uma conexão verdadeira. Cada uma de nossas loucuras se conectam de um jeito especial...";
-                
-                message2.querySelector('.love-note').innerHTML = 
-                    "Prometo ser teu porto seguro, teu guardião e teu desejo mais profundo, assim como você é o meu. Minha missão é te fazer gozar além dos prazeres da carne, quero fazer tua alma gozar e despertar em você o teu lado mais selvagem.";
-                
-                // Alterar fotos
-                const photos = gallery.querySelectorAll('.photo');
-                photos[0].src = "https://i2.imageban.ru/out/2025/06/13/a18784388f52b11a6a9c997cb337356d.jpg";
-                photos[0].parentElement.querySelector('.photo-caption').textContent = "Minha toalha vermelha";
-                
-                photos[1].src = "https://i7.imageban.ru/out/2025/06/13/35529e7a45d4f93bdad0fe0c82984e80.jpg";
-                photos[1].parentElement.querySelector('.photo-caption').textContent = "Com você fico a vontade";
-                
-                photos[2].src = "https://i4.imageban.ru/out/2025/06/13/7fdc3f404efc3bd6ff9126a8ae61fa53.jpeg";
-                photos[2].parentElement.querySelector('.photo-caption').textContent = "Quero ser seu desejo mais profundo!";
-                
-                // Mostrar vídeo secreto
-                secretVideo.style.display = "block";
-                videoElement.src = "https://drive.google.com/uc?export=download&id=1V-WJtJtQnNOQ2u3AokTzuz2QLH9Vds6i"; // Substitua pelo seu vídeo
-                videoElement.poster = "https://i4.imageban.ru/out/2025/06/13/dbcc6d07ea0ff781aa18ee6028c24f4d.jpeg";
-                
-                // Trocar a música para o tema escuro
-                currentAudio.pause();
-                currentAudio = audioDark;
-                currentAudio.volume = 0.5;
-                currentAudio.play();
-                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                audioTitle.textContent = "Música do Desejo";
-                
-                // Fechar modal
-                passwordModal.style.display = 'none';
-                secretPassword.value = '';
-                
-                // Mostrar confetes
-                showConfetti();
-                
+                ativarTemaSecreto();
             } else {
                 // Mostrar mensagem de erro
                 errorMessage.style.display = 'block';
@@ -601,6 +555,71 @@
                 secretPassword.focus();
             }
         });
+        
+        // Função para ativar o tema secreto
+        function ativarTemaSecreto() {
+            // Ativar tema secreto
+            document.body.classList.add('secret-theme');
+            
+            // Mudar o texto do botão
+            themeToggle.innerHTML = '<i class="fas fa-heart"></i> Tema Especial';
+            
+            // Alterar mensagens
+            message1.querySelector('.love-note').innerHTML = 
+                "Hoje descobri que o amor não precisa de tempo para existir. Em apenas um mês, você me mostrou o que é uma conexão verdadeira. Cada uma de nossas loucuras se conectam de um jeito especial...";
+            
+            message2.querySelector('.love-note').innerHTML = 
+                "Prometo ser teu porto seguro, teu guardião e teu desejo mais profundo, assim como você é o meu. Minha missão é te fazer gozar além dos prazeres da carne, quero fazer tua alma gozar e despertar em você o teu lado mais selvagem.";
+            
+            // Alterar fotos
+            const photos = gallery.querySelectorAll('.photo-container');
+            
+            // Se houver fotos suficientes, substituímos
+            if (photos.length >= 4) {
+                photos[0].querySelector('.photo').src = "https://i2.imageban.ru/out/2025/06/13/a18784388f52b11a6a9c997cb337356d.jpg";
+                photos[0].querySelector('.photo-caption').textContent = "Minha toalha vermelha";
+                
+                photos[1].querySelector('.photo').src = "https://i7.imageban.ru/out/2025/06/13/35529e7a45d4f93bdad0fe0c82984e80.jpg";
+                photos[1].querySelector('.photo-caption').textContent = "Com você fico a vontade";
+                
+                photos[2].querySelector('.photo').src = "https://i4.imageban.ru/out/2025/06/13/7fdc3f404efc3bd6ff9126a8ae61fa53.jpeg";
+                photos[2].querySelector('.photo-caption').textContent = "Quero ser seu desejo mais profundo!";
+                
+                // Esconder a quarta foto e mostrar o vídeo no lugar
+                photos[3].style.display = 'none';
+                secretVideo.style.display = "block";
+            }
+            
+            // Configurar vídeo secreto
+            videoElement.src = "https://uc164f1b54e08619cec66155661d.dl.dropboxusercontent.com/cd/0/get/Crkaw4wRyPAeY6TkinfT5CiGs51nWOvD2X_nrONXWq3JaxhePo-21a_jE3XfaZYkyPV1Y8ahC-wRXngtGfKiduTFu9EZSNzYVBGpB7E8fFDrxv2mC9bjQqnul6ktnORm3DlKfm6dLIJ7FQaxQaHdM2MQP6XzzST2swiq-krH0H4D-Q/file?_download_id=2281788179199365501266855765944874373841041530199775671613435395901&_log_download_success=1#";
+            videoElement.poster = "https://i4.imageban.ru/out/2025/06/13/dbcc6d07ea0ff781aa18ee6028c24f4d.jpeg";
+            
+            // Trocar a música para o tema escuro
+            trocarMusica(audioDark, "Música do Desejo");
+            
+            // Fechar modal
+            passwordModal.style.display = 'none';
+            secretPassword.value = '';
+            
+            // Mostrar confetes
+            showConfetti();
+        }
+        
+        // Função para trocar a música
+        function trocarMusica(novoAudio, titulo) {
+            currentAudio.pause();
+            currentAudio = novoAudio;
+            currentAudio.volume = 0.5;
+            currentAudio.play().catch(e => {
+                console.error("Erro ao reproduzir áudio:", e);
+                // Tenta dar play com interação do usuário
+                document.body.addEventListener('click', () => {
+                    currentAudio.play();
+                }, { once: true });
+            });
+            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            audioTitle.textContent = titulo;
+        }
         
         // Fechar modal ao clicar fora dele
         window.addEventListener('click', (e) => {
@@ -614,7 +633,9 @@
         // Controles do player de áudio
         playPauseBtn.addEventListener('click', () => {
             if(currentAudio.paused) {
-                currentAudio.play();
+                currentAudio.play().catch(e => {
+                    console.error("Erro ao reproduzir áudio:", e);
+                });
                 playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
             } else {
                 currentAudio.pause();
@@ -644,7 +665,6 @@
         // Efeito de confete para quando o tema secreto é ativado
         function showConfetti() {
             const confettiCount = 100;
-            const container = document.querySelector('.container');
             
             for (let i = 0; i < confettiCount; i++) {
                 const confetti = document.createElement('div');
@@ -680,7 +700,13 @@
         // Iniciar música suavemente
         setTimeout(() => {
             currentAudio.volume = 0.2;
-            currentAudio.play();
+            currentAudio.play().catch(e => {
+                console.error("Erro ao reproduzir áudio automaticamente:", e);
+                // Tenta dar play com interação do usuário
+                document.body.addEventListener('click', () => {
+                    currentAudio.play();
+                }, { once: true });
+            });
             playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
         }, 3000);
     </script>
