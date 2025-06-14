@@ -48,6 +48,7 @@
             line-height: 1.6;
             padding: 20px;
             min-height: 100vh;
+            position: relative;
         }
         
         .container {
@@ -106,6 +107,24 @@
             display: block;
         }
         
+        .video-container {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            height: 350px;
+            background-color: var(--gallery-bg);
+            position: relative;
+            display: none; /* Inicialmente oculto */
+        }
+        
+        .video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
         .photo-caption {
             position: absolute;
             bottom: 0;
@@ -124,6 +143,14 @@
         }
         
         .photo-container:hover .photo-caption {
+            transform: translateY(0);
+        }
+        
+        .video-container:hover {
+            transform: translateY(-10px);
+        }
+        
+        .video-container:hover .photo-caption {
             transform: translateY(0);
         }
         
@@ -183,44 +210,91 @@
             border: 1px solid var(--card-border);
         }
         
-        .qrcode {
+        .qrcode-img {
             width: 200px;
             height: 200px;
             margin: 0 auto;
-            background: #fff;
             border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .qrcode::before {
-            content: "❤️";
-            position: absolute;
-            font-size: 3rem;
-            z-index: 1;
-        }
-        
-        .qrcode-grid {
-            display: grid;
-            grid-template-columns: repeat(21, 1fr);
-            grid-template-rows: repeat(21, 1fr);
-            width: 180px;
-            height: 180px;
-            gap: 1px;
-        }
-        
-        .pixel {
-            background: var(--heart-color);
-            border-radius: 2px;
+            display: block;
+            border: 8px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         
         .qrcode-text {
             margin-top: 15px;
             font-size: 0.9rem;
             color: var(--text-primary);
+        }
+        
+        /* Player de áudio */
+        .audio-player {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 300px;
+            background: var(--card-bg);
+            border-radius: 30px;
+            padding: 15px 20px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--card-border);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .audio-controls {
+            flex: 1;
+        }
+        
+        .audio-title {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .audio-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(230, 0, 115, 0.2);
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .audio-progress {
+            height: 100%;
+            width: 0;
+            background: var(--text-secondary);
+            border-radius: 2px;
+        }
+        
+        .audio-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .audio-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .audio-btn:hover {
+            background: rgba(230, 0, 115, 0.1);
         }
         
         /* Modal para senha secreta */
@@ -301,9 +375,14 @@
             h1 { font-size: 2.2rem; }
             .subtitle { font-size: 1.2rem; }
             .gallery { grid-template-columns: 1fr; }
-            .photo-container { height: 400px; }
+            .photo-container, .video-container { height: 400px; }
             .message { padding: 25px; }
             .love-note { font-size: 1.1rem; }
+            .audio-player {
+                width: calc(100% - 40px);
+                left: 20px;
+                right: 20px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -318,6 +397,13 @@
             .modal-content {
                 padding: 20px;
             }
+            .qrcode-container {
+                padding: 15px;
+            }
+            .qrcode-img {
+                width: 150px;
+                height: 150px;
+            }
         }
     </style>
 </head>
@@ -325,6 +411,20 @@
     <button class="theme-toggle" id="themeToggle">
         <i class="fas fa-key"></i> Tema Secreto
     </button>
+    
+    <!-- Player de áudio -->
+    <div class="audio-player" id="audioPlayer">
+        <div class="audio-controls">
+            <div class="audio-title" id="audioTitle">Música do Amor</div>
+            <div class="audio-bar" id="audioBar">
+                <div class="audio-progress" id="audioProgress"></div>
+            </div>
+        </div>
+        <div class="audio-buttons">
+            <button class="audio-btn" id="playPauseBtn"><i class="fas fa-play"></i></button>
+            <button class="audio-btn" id="muteBtn"><i class="fas fa-volume-up"></i></button>
+        </div>
+    </div>
     
     <!-- Modal para senha -->
     <div class="modal" id="passwordModal">
@@ -366,9 +466,14 @@
                 <img src="https://i7.imageban.ru/out/2025/06/12/c0cfb652b768ecd4994da2868cb4e0fe.jpeg" alt="Nossa foto 3" class="photo">
                 <div class="photo-caption">Cada momento é especial com você</div>
             </div>
-            <div class="photo-container">
-                <img src="https://i7.imageban.ru/out/2025/06/12/320bcc13a8b65c337e2ac9b4224c42b6.jpeg" alt="Nossa foto 4" class="photo">
-                <div class="photo-caption">Aonde me sinto em paz</div>
+            
+            <!-- Container de vídeo (inicialmente oculto) -->
+            <div class="video-container" id="secretVideo">
+                <video class="video" controls>
+                    <source src="" type="video/mp4">
+                    Seu navegador não suporta vídeos HTML5.
+                </video>
+                <div class="photo-caption">Nosso momento especial</div>
             </div>
         </div>
         
@@ -383,17 +488,14 @@
         
         <div class="qrcode-container">
             <h3>Nosso QR Code Especial</h3>
-            <div class="qrcode">
-                <div class="qrcode-grid" id="qrGrid">
-                    <!-- QR code será gerado por JavaScript -->
-                </div>
-            </div>
+            <!-- Substitua o src pelo caminho do seu QR code -->
+            <img src="https://i6.imageban.ru/out/2025/06/14/984de4bee5ce00a4a5b6a437e6ed08b1.png" alt="QR Code" class="qrcode-img">
             <p class="qrcode-text">Escaneie para guardar esta página em seu coração</p>
         </div>
         
         <footer>
             <p>Feito com <span class="heart">❤️</span> especialmente para você</p>
-            <p>Nosso primeiro Dia dos Namorados - 2026</p>
+            <p>Nosso primeiro Dia dos Namorados - 12/06/2025</p>
         </footer>
     </div>
 
@@ -405,10 +507,27 @@
         const submitPassword = document.getElementById('submitPassword');
         const errorMessage = document.getElementById('errorMessage');
         const closeModal = document.getElementById('closeModal');
-        const qrGrid = document.getElementById('qrGrid');
         const message1 = document.getElementById('message1');
         const message2 = document.getElementById('message2');
         const gallery = document.querySelector('.gallery');
+        const secretVideo = document.getElementById('secretVideo');
+        const videoElement = secretVideo.querySelector('video');
+        
+        // Elementos do player de áudio
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const muteBtn = document.getElementById('muteBtn');
+        const audioBar = document.getElementById('audioBar');
+        const audioProgress = document.getElementById('audioProgress');
+        const audioTitle = document.getElementById('audioTitle');
+        
+        // Áudios para cada tema
+        const audioLight = new Audio("https://github.com/OBrainw/presente-dia-namorados/blob/main/Tiee%20-%20Mo%C3%A7a%20(Compilado%20Oficial).mp3");
+        const audioDark = new Audio("https://github.com/OBrainw/presente-dia-namorados/blob/main/Adele%20-%20Skyfall.mp3");
+        
+        // Áudio ativo
+        let currentAudio = audioLight;
+        currentAudio.volume = 0.5;
         
         // Senha secreta (pode ser alterada)
         const SECRET_PASSWORD = "vermelho";
@@ -455,8 +574,18 @@
                 photos[2].src = "https://i4.imageban.ru/out/2025/06/13/7fdc3f404efc3bd6ff9126a8ae61fa53.jpeg";
                 photos[2].parentElement.querySelector('.photo-caption').textContent = "Quero ser seu desejo mais profundo!";
                 
-                photos[3].src = "https://i4.imageban.ru/out/2025/06/13/dbcc6d07ea0ff781aa18ee6028c24f4d.jpeg";
-                photos[3].parentElement.querySelector('.photo-caption').textContent = "Let the sky fall";
+                // Mostrar vídeo secreto
+                secretVideo.style.display = "block";
+                videoElement.src = "https://github.com/OBrainw/presente-dia-namorados/blob/main/love.mp4"; // Substitua pelo seu vídeo
+                videoElement.poster = "https://i4.imageban.ru/out/2025/06/13/dbcc6d07ea0ff781aa18ee6028c24f4d.jpeg";
+                
+                // Trocar a música para o tema escuro
+                currentAudio.pause();
+                currentAudio = audioDark;
+                currentAudio.volume = 0.5;
+                currentAudio.play();
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                audioTitle.textContent = "Música do Desejo";
                 
                 // Fechar modal
                 passwordModal.style.display = 'none';
@@ -482,61 +611,35 @@
             }
         });
         
-        // Gerar QR code com coração
-        function generateQRCode() {
-            // Padrão de QR code com coração no centro
-            const qrPattern = [
-                "111111100010101111111",
-                "100000101011101000001",
-                "101110101010101011101",
-                "101110101000101011101",
-                "101110100010001011101",
-                "100000101010101000001",
-                "111111101010101111111",
-                "000000001110100000000",
-                "111100111010101001111",
-                "101010001000100010101",
-                "010101010111010101010",
-                "110101000101010001011",
-                "100101011101110101001",
-                "001010100000001010100",
-                "111111101000101111111",
-                "100000100010001000001",
-                "101110101110101011101",
-                "101110100000001011101",
-                "101110101010101011101",
-                "100000101010101000001",
-                "111111101010101111111"
-            ];
-            
-            qrGrid.innerHTML = '';
-            
-            for (let i = 0; i < 21; i++) {
-                for (let j = 0; j < 21; j++) {
-                    const pixel = document.createElement('div');
-                    pixel.classList.add('pixel');
-                    
-                    // Adiciona um coração no centro
-                    if (i === 10 && j === 10) {
-                        pixel.innerHTML = '❤️';
-                        pixel.style.fontSize = '1.2rem';
-                        pixel.style.lineHeight = '0';
-                        pixel.style.display = 'flex';
-                        pixel.style.alignItems = 'center';
-                        pixel.style.justifyContent = 'center';
-                        pixel.style.background = 'transparent';
-                    } 
-                    // Cria o padrão do QR code
-                    else if (qrPattern[i] && qrPattern[i][j] === '1') {
-                        pixel.style.background = 'var(--heart-color)';
-                    } else {
-                        pixel.style.background = '#fff';
-                    }
-                    
-                    qrGrid.appendChild(pixel);
-                }
+        // Controles do player de áudio
+        playPauseBtn.addEventListener('click', () => {
+            if(currentAudio.paused) {
+                currentAudio.play();
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                currentAudio.pause();
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
             }
-        }
+        });
+        
+        muteBtn.addEventListener('click', () => {
+            currentAudio.muted = !currentAudio.muted;
+            muteBtn.innerHTML = currentAudio.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+        });
+        
+        // Atualizar barra de progresso
+        currentAudio.addEventListener('timeupdate', () => {
+            const progress = (currentAudio.currentTime / currentAudio.duration) * 100;
+            audioProgress.style.width = `${progress}%`;
+        });
+        
+        // Pular para posição específica na música
+        audioBar.addEventListener('click', (e) => {
+            const barWidth = audioBar.clientWidth;
+            const clickPosition = e.offsetX;
+            const duration = currentAudio.duration;
+            currentAudio.currentTime = (clickPosition / barWidth) * duration;
+        });
         
         // Efeito de confete para quando o tema secreto é ativado
         function showConfetti() {
@@ -574,8 +677,12 @@
             }
         }
         
-        // Inicializar QR code
-        generateQRCode();
+        // Iniciar música suavemente
+        setTimeout(() => {
+            currentAudio.volume = 0.2;
+            currentAudio.play();
+            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        }, 3000);
     </script>
 </body>
 </html>
